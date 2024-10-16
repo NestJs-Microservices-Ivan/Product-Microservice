@@ -4,6 +4,7 @@ import { Type } from "class-transformer";
 
 export class CreateProductDto {
 
+    id:number
     
     @IsString()
     @MinLength(1)

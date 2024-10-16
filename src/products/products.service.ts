@@ -35,7 +35,10 @@ export class ProductsService extends PrismaClient implements OnModuleInit {
 
     const data = await this.products.findMany({
       skip : (skip - 1) * take,
-      take
+      take,
+      where:{
+        available: true
+      }
     })
 
     if(data.length == 0)
@@ -54,9 +57,9 @@ export class ProductsService extends PrismaClient implements OnModuleInit {
 
   async findOne(id: number) {
 
-    const findById = await this.products.findUnique({
+    const findById = await this.products.findFirst({
       where:{
-        id
+        id, available: true
       }
     })
 
@@ -68,9 +71,7 @@ export class ProductsService extends PrismaClient implements OnModuleInit {
   }
 
   async update(id: number, updateProductDto: UpdateProductDto) {
-    
-    console.log(updateProductDto)
-    
+        
     const updateProduct = await this.products.update({
       where:{id},
       data:updateProductDto
@@ -80,7 +81,18 @@ export class ProductsService extends PrismaClient implements OnModuleInit {
 
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} product`;
+  async remove(id: number) {
+
+    const updateProduct = await this.products.update({
+      where: {
+        id
+      },
+      data: {
+        available: false,
+      },
+    })
+
+    return updateProduct
+
   }
 }
