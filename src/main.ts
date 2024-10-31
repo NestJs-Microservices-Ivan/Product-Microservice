@@ -23,6 +23,8 @@ AppModule,
       forbidNonWhitelisted: true
     })
   )
+
+  await app.listen()
   
   logger.log(`Products Microservice running on port ${envsValue.PORT}`)
   
